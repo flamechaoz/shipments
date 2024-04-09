@@ -1,7 +1,7 @@
 import express, { json, urlencoded } from 'express';
 import cors from 'cors';
 import router from './routes/v1/index.js';
-import { errorConverter, errorHandler } from './middlewares/error';
+import { errorConverter, errorHandler } from './middlewares/error.js';
 
 const app = express();
 

@@ -1,7 +1,7 @@
 import httpStatus, { BAD_REQUEST, INTERNAL_SERVER_ERROR } from 'http-status';
-import { env } from '../config/config';
-import { error as _error } from '../config/logger';
-import ApiError from '../utils/ApiError';
+import { env } from '../config/config.js';
+import { error as _error } from '../config/logger.js';
+import ApiError from '../utils/ApiError.js';
 
 const errorConverter = (err, req, res, next) => {
   let error = err;
