@@ -1,0 +1,72 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider          = "mysql"
+  url               = env("DATABASE_URL")
+}
+
+model PickingSlip {
+  id                        BigInt @id @default(autoincrement()) @db.BigInt()
+  orderId                   BigInt @db.BigInt() @map("order_id")
+  orderFulfillmentOrderId   BigInt @db.BigInt() @map("order_fulfillment_order_id")
+  isContainedSingleProduct  Int @default(0) @db.TinyInt() @map("is_contained_single_product")
+  createdAt                 DateTime @default(now()) @db.Timestamp(0) @map("created_at")
+  pickingSlipItems          PickingSlipItem[]
+  pickingSlipDates          PickingSlipDate?
+
+  @@map("picking_slips")
+}
+
+model PickingSlipItem {
+  id                        BigInt @id @default(autoincrement()) @db.BigInt()
+  pickingSlipId             BigInt @db.BigInt() @map("picking_slip_id")
+  itemId                    BigInt @db.BigInt() @map("item_id")
+  stockId                   BigInt? @db.BigInt() @map("stock_id")
+  orderFulfillmentProductId BigInt @db.BigInt() @map("order_fulfillment_product_id")
+  quantity                  Int @db.Int() @map("quantity")
+  refundedQuantity          Int @default(0) @db.Int() @map("refunded_quantity")
+  locationId                Int? @db.Int() @map("location_id")
+  locationCode              String? @db.VarChar(30) @map("location_code")
+  isPreOrder                Int @default(0) @db.TinyInt() @map("is_pre_order")
+  isSalesOnly               Int @default(0) @db.TinyInt() @map("is_sales_only")
+  preOrderShippingAt        DateTime? @db.Timestamp(0) @map("pre_order_shipping_at")
+  preOrderDeadlineAt        DateTime? @db.Timestamp(0) @map("pre_order_deadline_at")
+  createdAt                 DateTime @default(now()) @db.Timestamp(0) @map("created_at")
+  updatedAt                 DateTime @default(now()) @db.Timestamp(0) @updatedAt @map("updated_at")
+  pickingSlip               PickingSlip @relation(fields: [pickingSlipId], references: [id])
+
+  @@map("picking_slip_items")
+}
+
+
+model PickingSlipDate {
+  id                  BigInt @id @default(autoincrement()) @db.BigInt()
+  pickingSlipId       BigInt @db.BigInt() @unique @map("picking_slip_id")
+  printedUsername     String? @db.VarChar(20) @map("printed_username")
+  inspectedUsername   String? @db.VarChar(20) @map("inspected_username")
+  packedUsername      String? @db.VarChar(20) @map("packed_username")
+  shippedUsername     String? @db.VarChar(20) @map("shipped_username")
+  heldUsername        String? @db.VarChar(20) @map("held_username")
+  cancelledUsername   String? @db.VarChar(20) @map("cancelled_username")
+  refundedUsername    String? @db.VarChar(20) @map("refunded_username")
+  confirmedUsername   String? @db.VarChar(20) @map("confirmed_username")
+  printedAt           DateTime? @db.Timestamp(0) @map("printed_at")
+  inspectedAt         DateTime? @db.Timestamp(0) @map("inspected_at")
+  packedAt            DateTime? @db.Timestamp(0) @map("packed_at")
+  shippedAt           DateTime? @db.Timestamp(0) @map("shipped_at")
+  deliveredAt         DateTime? @db.Timestamp(0) @map("delivered_at")
+  returnedAt          DateTime? @db.Timestamp(0) @map("returned_at")
+  cancelledAt         DateTime? @db.Timestamp(0) @map("cancelled_at")
+  refundedAt          DateTime? @db.Timestamp(0) @map("refunded_at")
+  heldAt              DateTime? @db.Timestamp(0) @map("held_at")
+  confirmedAt         DateTime? @db.Timestamp(0) @map("confirmed_at")
+  heldReason          String? @db.VarChar(20) @map("held_reason")
+  pickingSlip         PickingSlip @relation(fields: [pickingSlipId], references: [id])
+
+  @@map("picking_slip_dates")
+}
