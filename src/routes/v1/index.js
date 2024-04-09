@@ -1,7 +1,8 @@
 import express from 'express';
 import pickingSlipsRoute from './picking-slips.route.js';
+import docsRoute from '././docs.route.js';
 
-const routes = express.Router();
+const router = express.Router();
 
 const defaultRoutes = [
   {
@@ -10,8 +11,23 @@ const defaultRoutes = [
   },
 ];
 
+const devRoutes = [
+  // routes available only in development mode
+  {
+    path: '/docs',
+    route: docsRoute,
+  },
+];
+
 defaultRoutes.forEach((route) => {
-  routes.use(route.path, route.route);
+  router.use(route.path, route.route);
 });
 
-export default routes;
+/* istanbul ignore next */
+if (config.env === 'development') {
+  devRoutes.forEach((route) => {
+    router.use(route.path, route.route);
+  });
+}
+
+export default router;
