@@ -20,7 +20,7 @@ export default pickingSlipsRoute;
 
 /**
  * @swagger
- * /picking-slips/:
+ * /picking-slips:
  *   get:
  *     summary: Get picking slips
  *     description: Retrieve all picking slips.
