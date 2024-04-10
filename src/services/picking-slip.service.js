@@ -3,7 +3,7 @@ import ApiError from "../utils/ApiError.js";
 
 const getPickingSlips = async (options) => {
     const limit = (options.status == 'printed' || options.status == 'not printed') ? 3 : options.limit;
-   
+
     const pickingSlips = await prisma.pickingSlip.findMany({
         take: limit,
         select: {
@@ -22,29 +22,52 @@ const getPickingSlips = async (options) => {
                 is_pre_order: true,
               }
             }
-        }
-      
+        },
+        where: {
+            AND: [
+              options.status == 'held' ? { picking_slip_dates: { held_at: { not: null } } } :
+              options.status == 'printed' ? {
+                picking_slip_dates: {
+                  printed_at: { not: null },
+                  inspected_at: null,
+                  shipped_at: null,
+                  held_at: null,
+                }
+              } :
+              options.status == 'not printed' ? {
+                picking_slip_dates: {
+                  printed_at: null,
+                  inspected_at: null,
+                  shipped_at: null,
+                  held_at: null,
+                }
+              } : {},
+            ],
+        },
     });
+
+    console.log(options.status == 'held')
 
     // restructure result to match expected output
     const pickingSlipsWithStatusAndPreOrderItem = pickingSlips.map(pickingSlip => {
 
-        const printed = pickingSlip.pickingSlipDates?.printed_at !== null &&
-                        pickingSlip.pickingSlipDates?.inspected_at === null &&
-                        pickingSlip.pickingSlipDates?.shipped_at === null &&
-                        pickingSlip.pickingSlipDates?.held_at === null;
+        const printed = pickingSlip.picking_slip_dates?.printed_at !== null &&
+                    pickingSlip.picking_slip_dates?.inspected_at === null &&
+                    pickingSlip.picking_slip_dates?.shipped_at === null &&
+                    pickingSlip.picking_slip_dates?.held_at === null;
         
-        const held = pickingSlip.pickingSlipDates?.held_at !== null;
+        // strict checks for undefined is needed
+        const held = pickingSlip.picking_slip_dates?.held_at !== null && pickingSlip.picking_slip_dates?.held_at !== undefined;
     
         const hasPreOrderItem = pickingSlip.picking_slip_items.some(item => item.is_pre_order === 1);
     
         let pickingSlipStatus;
         if (held) {
-          pickingSlipStatus = 'held';
+            pickingSlipStatus = 'held';
         } else if (printed) {
-          pickingSlipStatus = 'printed';
+            pickingSlipStatus = 'printed';
         } else {
-          pickingSlipStatus = 'not printed';
+            pickingSlipStatus = 'not printed';
         }
     
         return {
