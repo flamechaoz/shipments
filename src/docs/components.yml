@@ -1,0 +1,57 @@
+components:
+  schemas:
+    Picking Slip:
+      type: object
+      properties:
+        order_id:
+          type: number
+        picking_slip_id:
+          type: number
+        picking_slip_status:
+          type: string
+          enum: [not printed, printed, held]
+        has_pre_order_item:
+          type: number
+      example:
+        order_id: 123
+        picking_slip_id: 123
+        picking_slip_status: printed
+        has_pre_order_item: 0
+
+    Error:
+      type: object
+      properties:
+        code:
+          type: number
+        message:
+          type: string
+
+  responses:
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 401
+            message: Please authenticate
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 403
+            message: Forbidden
+    NotFound:
+      description: Not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 404
+            message: Not found
+

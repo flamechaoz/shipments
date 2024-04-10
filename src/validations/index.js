@@ -1,10 +1,10 @@
 import Joi from 'joi';
 
 const getPickingSlips = {
-  params: Joi.object().keys({
+  query: Joi.object().keys({
     limit: Joi.number().integer(),
     page: Joi.number().integer(),
-    status: Joi.string().valid('not printed', 'printed ', 'held'),
+    status: Joi.string().valid('not printed', 'printed', 'held'),
   }),
 };
 
