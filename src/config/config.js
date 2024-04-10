@@ -26,4 +26,4 @@ const env = envVars.NODE_ENV;
 const port = envVars.PORT;
 const database_url = envVars.DATABASE_URL;
 
-export default {env, port, database_url}
+export default { env, port, database_url };

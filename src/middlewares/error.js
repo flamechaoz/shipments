@@ -1,7 +1,9 @@
-import httpStatus, { BAD_REQUEST, INTERNAL_SERVER_ERROR } from 'http-status';
-import { env } from '../config/config.js';
-import { error as _error } from '../config/logger.js';
+import config from '../config/config.js';
 import ApiError from '../utils/ApiError.js';
+import httpStatus from 'http-status';
+import pkg from 'http-status';
+import logger from '../config/logger.js';
+const { BAD_REQUEST, INTERNAL_SERVER_ERROR } = pkg;
 
 const errorConverter = (err, req, res, next) => {
   let error = err;
@@ -16,7 +18,7 @@ const errorConverter = (err, req, res, next) => {
 
 const errorHandler = (err, req, res, next) => {
   let { statusCode, message } = err;
-  if (env === 'production' && !err.isOperational) {
+  if (config.env === 'production' && !err.isOperational) {
     statusCode = INTERNAL_SERVER_ERROR;
     message = httpStatus[INTERNAL_SERVER_ERROR];
   }
@@ -26,11 +28,11 @@ const errorHandler = (err, req, res, next) => {
   const response = {
     code: statusCode,
     message,
-    ...(env === 'development' && { stack: err.stack }),
+    ...(config.env === 'development' && { stack: err.stack }),
   };
 
-  if (env === 'development') {
-    _error(err);
+  if (config.env === 'development') {
+    logger.error(err);
   }
 
   res.status(statusCode).send(response);

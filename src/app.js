@@ -1,8 +1,9 @@
 import express, { json, urlencoded } from 'express';
 import cors from 'cors';
 import router from './routes/v1/index.js';
-import { errorConverter, errorHandler } from './middlewares/error.js';
-
+import error from './middlewares/error.js';
+import ApiError from './utils/ApiError.js';
+import httpStatus from 'http-status';
 const app = express();
 
 // parse json request body
@@ -27,9 +28,9 @@ app.use((req, res, next) => {
 });
 
 // convert error to ApiError, if needed
-app.use(errorConverter);
+app.use(error.errorConverter);
 
 // handle error
-app.use(errorHandler);
+app.use(error.errorHandler);
 
 export default app;

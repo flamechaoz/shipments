@@ -1,6 +1,7 @@
 import express from 'express';
 import pickingSlipsRoute from './picking-slips.route.js';
 import docsRoute from '././docs.route.js';
+import config from '../../config/config.js';
 
 const router = express.Router();
 
