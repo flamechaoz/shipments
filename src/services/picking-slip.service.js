@@ -44,6 +44,9 @@ const getPickingSlips = async (options) => {
               } : {},
             ],
         },
+        orderBy: {
+            created_at: 'desc' // Sort by created_at from newest to oldest
+        }
     });
 
     console.log(options.status == 'held')
