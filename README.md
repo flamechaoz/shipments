@@ -9,13 +9,25 @@ Install the dependencies:
 yarn install
 ```
 
-Set the environment variables:
+Have an empty MySQL database ready. 
+
+Set the environment variables by running the code below in a terminal:
 
 ```bash
 cp .env.example .env
-
-# open .env and modify the environment variables (if needed)
 ```
+
+Open .env and modify the environment variables to point to your database.
+```
+DATABASE_URL='mysql://<user>:<pass>@<host>:3306/<db_name>'
+```
+
+Next, spin up a dev environment with the command:
+```
+yarn dev
+```
+
+You may follow the link `http://localhost:3000/v1/docs` to view this project's endpoints.
 
 ## Table of Contents
 
