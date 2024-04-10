@@ -2,7 +2,8 @@ import prisma from "../utils/prismaClient.js";
 import ApiError from "../utils/ApiError.js";
 
 const getPickingSlips = async (options) => {
-    const { limit, status } = options;
+    const limit = (options.status == 'printed' || options.status == 'not printed') ? 3 : options.limit;
+   
     const pickingSlips = await prisma.pickingSlip.findMany({
         take: limit,
         select: {
@@ -27,7 +28,7 @@ const getPickingSlips = async (options) => {
 
     // restructure result to match expected output
     const pickingSlipsWithStatusAndPreOrderItem = pickingSlips.map(pickingSlip => {
-        
+
         const printed = pickingSlip.pickingSlipDates?.printed_at !== null &&
                         pickingSlip.pickingSlipDates?.inspected_at === null &&
                         pickingSlip.pickingSlipDates?.shipped_at === null &&
