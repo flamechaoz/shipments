@@ -93,22 +93,22 @@ model PickingSlip {
 `picking_slip_items`
 ```javascript
 model PickingSlipItem {
-  id                        BigInt @id @default(autoincrement()) @db.BigInt()
-  picking_slip_id             BigInt @db.BigInt() @map("picking_slip_id")
-  item_id                    BigInt @db.BigInt() @map("item_id")
-  stock_id                   BigInt? @db.BigInt() @map("stock_id")
-  order_fulfillment_product_id BigInt @db.BigInt() @map("order_fulfillment_product_id")
-  quantity                  Int @db.Int() @map("quantity")
-  refunded_quantity          Int @default(0) @db.Int() @map("refunded_quantity")
-  location_id                Int? @db.Int() @map("location_id")
-  location_code              String? @db.VarChar(30) @map("location_code")
-  is_pre_order                Int @default(0) @db.TinyInt() @map("is_pre_order")
-  is_sales_only               Int @default(0) @db.TinyInt() @map("is_sales_only")
-  pre_order_shipping_at        DateTime? @db.Timestamp(0) @map("pre_order_shipping_at")
-  pre_order_deadline_at        DateTime? @db.Timestamp(0) @map("pre_order_deadline_at")
-  created_at                 DateTime @default(now()) @db.Timestamp(0) @map("created_at")
-  updated_at                 DateTime @default(now()) @db.Timestamp(0) @updatedAt @map("updated_at")
-  picking_lip               PickingSlip @relation(fields: [picking_slip_id], references: [id])
+  id                            BigInt @id @default(autoincrement()) @db.BigInt()
+  picking_slip_id               BigInt @db.BigInt() @map("picking_slip_id")
+  item_id                       BigInt @db.BigInt() @map("item_id")
+  stock_id                      BigInt? @db.BigInt() @map("stock_id")
+  order_fulfillment_product_id  BigInt @db.BigInt() @map("order_fulfillment_product_id")
+  quantity                      Int @db.Int() @map("quantity")
+  refunded_quantity             Int @default(0) @db.Int() @map("refunded_quantity")
+  location_id                   Int? @db.Int() @map("location_id")
+  location_code                 String? @db.VarChar(30) @map("location_code")
+  is_pre_order                  Int @default(0) @db.TinyInt() @map("is_pre_order")
+  is_sales_only                 Int @default(0) @db.TinyInt() @map("is_sales_only")
+  pre_order_shipping_at         DateTime? @db.Timestamp(0) @map("pre_order_shipping_at")
+  pre_order_deadline_at         DateTime? @db.Timestamp(0) @map("pre_order_deadline_at")
+  created_at                    DateTime @default(now()) @db.Timestamp(0) @map("created_at")
+  updated_at                    DateTime @default(now()) @db.Timestamp(0) @updatedAt @map("updated_at")
+  picking_lip                   PickingSlip @relation(fields: [picking_slip_id], references: [id])
 
   @@map("picking_slip_items")
 }
@@ -117,8 +117,8 @@ model PickingSlipItem {
 `picking_slip_dates`
 ```javascript
 model PickingSlipDate {
-  id                  BigInt @id @default(autoincrement()) @db.BigInt()
-  picking_slip_id       BigInt @db.BigInt() @unique @map("picking_slip_id")
+  id                   BigInt @id @default(autoincrement()) @db.BigInt()
+  picking_slip_id      BigInt @db.BigInt() @unique @map("picking_slip_id")
   printed_username     String? @db.VarChar(20) @map("printed_username")
   inspected_username   String? @db.VarChar(20) @map("inspected_username")
   packed_username      String? @db.VarChar(20) @map("packed_username")
