@@ -16,7 +16,7 @@ components:
         order_id: 123
         picking_slip_id: 123
         picking_slip_status: printed
-        has_pre_order_item: 0
+        has_pre_order_item: "false"
 
     Error:
       type: object
