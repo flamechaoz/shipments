@@ -70,7 +70,79 @@ To view the list of available APIs and their specifications, run the server and 
 
 ## Database Structure
 
-TO DO
+The database is structured as the image below
+
+![Shipments ERD](https://github.com/flamechaoz/shipments/blob/main/src/assets/img/shipments_erd.png?raw=true)
+
+The Prisma equivalent:
+`picking_slips`
+```javascript
+model PickingSlip {
+  id                            BigInt @id @default(autoincrement()) @db.BigInt()
+  order_id                      BigInt @db.BigInt() @map("order_id")
+  order_fulfillment_order_id    BigInt @db.BigInt() @map("order_fulfillment_order_id")
+  is_contained_single_product   Int @default(0) @db.TinyInt() @map("is_contained_single_product")
+  created_at                    DateTime @default(now()) @db.Timestamp(0) @map("created_at")
+  picking_slip_items            PickingSlipItem[]
+  picking_slip_dates            PickingSlipDate?
+
+  @@map("picking_slips")
+}
+```
+
+`picking_slip_items`
+```javascript
+model PickingSlipItem {
+  id                        BigInt @id @default(autoincrement()) @db.BigInt()
+  picking_slip_id             BigInt @db.BigInt() @map("picking_slip_id")
+  item_id                    BigInt @db.BigInt() @map("item_id")
+  stock_id                   BigInt? @db.BigInt() @map("stock_id")
+  order_fulfillment_product_id BigInt @db.BigInt() @map("order_fulfillment_product_id")
+  quantity                  Int @db.Int() @map("quantity")
+  refunded_quantity          Int @default(0) @db.Int() @map("refunded_quantity")
+  location_id                Int? @db.Int() @map("location_id")
+  location_code              String? @db.VarChar(30) @map("location_code")
+  is_pre_order                Int @default(0) @db.TinyInt() @map("is_pre_order")
+  is_sales_only               Int @default(0) @db.TinyInt() @map("is_sales_only")
+  pre_order_shipping_at        DateTime? @db.Timestamp(0) @map("pre_order_shipping_at")
+  pre_order_deadline_at        DateTime? @db.Timestamp(0) @map("pre_order_deadline_at")
+  created_at                 DateTime @default(now()) @db.Timestamp(0) @map("created_at")
+  updated_at                 DateTime @default(now()) @db.Timestamp(0) @updatedAt @map("updated_at")
+  picking_lip               PickingSlip @relation(fields: [picking_slip_id], references: [id])
+
+  @@map("picking_slip_items")
+}
+```
+
+`picking_slip_dates`
+```javascript
+model PickingSlipDate {
+  id                  BigInt @id @default(autoincrement()) @db.BigInt()
+  picking_slip_id       BigInt @db.BigInt() @unique @map("picking_slip_id")
+  printed_username     String? @db.VarChar(20) @map("printed_username")
+  inspected_username   String? @db.VarChar(20) @map("inspected_username")
+  packed_username      String? @db.VarChar(20) @map("packed_username")
+  shipped_username     String? @db.VarChar(20) @map("shipped_username")
+  held_username        String? @db.VarChar(20) @map("held_username")
+  cancelled_username   String? @db.VarChar(20) @map("cancelled_username")
+  refunded_username    String? @db.VarChar(20) @map("refunded_username")
+  confirmed_username   String? @db.VarChar(20) @map("confirmed_username")
+  printed_at           DateTime? @db.Timestamp(0) @map("printed_at")
+  inspected_at         DateTime? @db.Timestamp(0) @map("inspected_at")
+  packed_at            DateTime? @db.Timestamp(0) @map("packed_at")
+  shipped_at           DateTime? @db.Timestamp(0) @map("shipped_at")
+  delivered_at         DateTime? @db.Timestamp(0) @map("delivered_at")
+  returned_at          DateTime? @db.Timestamp(0) @map("returned_at")
+  cancelled_at         DateTime? @db.Timestamp(0) @map("cancelled_at")
+  refunded_at          DateTime? @db.Timestamp(0) @map("refunded_at")
+  held_at              DateTime? @db.Timestamp(0) @map("held_at")
+  confirmed_at         DateTime? @db.Timestamp(0) @map("confirmed_at")
+  held_reason          String? @db.VarChar(20) @map("held_reason")
+  picking_slip         PickingSlip @relation(fields: [picking_slip_id], references: [id])
+
+  @@map("picking_slip_dates")
+}
+```
 
 ## Environment Variables
 
