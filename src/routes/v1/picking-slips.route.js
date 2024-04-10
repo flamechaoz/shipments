@@ -34,13 +34,6 @@ export default pickingSlipsRoute;
  *         default: 10
  *         description: Maximum number of picking slips per page (Min. val. 1)
  *       - in: query
- *         name: page
- *         schema:
- *           type: integer
- *           minimum: 1
- *           default: 1
- *         description: Page number (Min. val. 1)
- *       - in: query
  *         name: status
  *         schema:
  *           type: string

@@ -9,6 +9,11 @@ const app = express();
 // parse json request body
 app.use(json());
 
+BigInt.prototype.toJSON = function () {
+  const int = Number.parseInt(this.toString());
+  return int ?? this.toString();
+};
+
 // parse urlencoded request body
 app.use(urlencoded({ extended: true }));
 
